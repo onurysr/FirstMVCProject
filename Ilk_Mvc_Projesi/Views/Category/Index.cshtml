@@ -1,0 +1,30 @@
+﻿@model List<Category>
+@{
+}
+
+<div class="row">
+    <div class="col-9">
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th>Kategori Adi</th>
+                    <th>Aciklama</th>
+                    <th>Urun sayisi</th>
+                    <th>Detay</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@item.CategoryName</td>
+                    <td>@item.Description</td>
+                    <td>@item.Products.Count</td>
+                    <td><a class="btn btn-block btn-success" asp-controller="Category" asp-action="Detail" asp-route-id="@item.CategoryId">Detay</a></td> @*Önemliiiiiiiiii*@
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

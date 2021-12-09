@@ -1,0 +1,35 @@
+﻿@model List<Urun>
+@{
+    ViewData["Title"] = "Home Page";
+    string mesaj = "Hi Mvc";
+    Random rnd = new Random();
+    int counter = rnd.Next(10, 20);
+    //razor engine
+    //var model = UrunManager.GetUrunLer();
+}
+
+<div class="text-center">
+    <h1 class="display-4">Wielcommen</h1><br />
+    <h2>@mesaj  @counter</h2> 
+@*<ul>
+    @for (int i = 0; i < counter; i++)
+    {
+        <li>@i</li>
+    }
+</ul>*@
+
+    @*<ul>
+        @foreach (var item in model)
+	{
+		 <li>@item.Ad - @item.Fiyat</li>
+	}
+    </ul>*@
+
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@item.Ad - @item.Fiyat</li>
+        }
+    </ul>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>

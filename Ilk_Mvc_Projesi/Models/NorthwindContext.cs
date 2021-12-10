@@ -54,7 +54,7 @@ namespace Ilk_Mvc_Projesi.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=DESKTOP-8M7D7GE;Initial Catalog=Northwind;User ID=sa;Password=1234");
             }
         }
@@ -102,13 +102,15 @@ namespace Ilk_Mvc_Projesi.Models
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasIndex(e => e.CategoryName, "CategoryName");
+                entity.HasIndex(e => e.CategoryName, "CategoryName"); //categoryName göre arama yapınca hızlandırır.
 
-                entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
+                entity.Property(e => e.CategoryId).HasColumnName("CategoryID"); //
 
                 entity.Property(e => e.CategoryName)
-                    .IsRequired()
-                    .HasMaxLength(15);
+                    .IsRequired() //not null
+                    .HasMaxLength(15);//en fazla 15 karakter
+                    //.HasColumnType("Char"); //yipi char olsun
+                
 
                 entity.Property(e => e.Description).HasColumnType("ntext");
 
@@ -863,7 +865,7 @@ namespace Ilk_Mvc_Projesi.Models
                     .HasConstraintName("FK_Territories_Region");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            OnModelCreatingPartial(modelBuilder); //çok karışık yapıları partial ile ayırırız.
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

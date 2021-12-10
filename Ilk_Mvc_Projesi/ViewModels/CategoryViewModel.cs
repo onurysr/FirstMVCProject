@@ -17,5 +17,6 @@ namespace Ilk_Mvc_Projesi.ViewModels
         public string Description { get; set; }
 
         public int CategoryId { get; set; }
+
     }
 }

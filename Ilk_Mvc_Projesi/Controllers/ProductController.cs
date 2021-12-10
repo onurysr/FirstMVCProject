@@ -1,5 +1,6 @@
 ﻿using Ilk_Mvc_Projesi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,11 @@ namespace Ilk_Mvc_Projesi.Controllers
         }
         public IActionResult Index()
         {
-            var model = _context.Products.OrderBy(x => x.CategoryId).ToList();
+            var model = _context.Products.Include(x=> x.Category).OrderBy(x => x.ProductId).ToList();
             return View(model);
         }
 
-        public IActionResult Detail(int id)
+        public IActionResult Detail(int? id)
         {
             var Product = _context.Products.FirstOrDefault(x => x.ProductId == id);
             if (Product == null)

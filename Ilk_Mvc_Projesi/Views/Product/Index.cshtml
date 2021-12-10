@@ -6,9 +6,8 @@
             <thead>
                 <tr>
                     <th>Ürün Adı</th>
-                    <th>Kategorisi</th>
                     <th>Birim Fiyat</th>
-                    <th>Adet Sayısı</th>
+                    <th>Kategori Adı</th>
                     <th>Detay</th>
                 </tr>
             </thead>
@@ -18,9 +17,8 @@
                 {
                 <tr>
                     <td>@item.ProductName</td>
-                    <td>@item.Category.CategoryName</td>
                     <td>@item.UnitPrice</td>
-                    <td>@item.UnitsInStock</td>
+                    <td>@item.Category.CategoryName</td>
                     <td><a class="btn btn-info" asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">Detay</a></td>
                 </tr>
 
@@ -28,8 +26,6 @@
             </tbody>
         </table>
         
-
-        </tbody>
     </div>
 </div>
 

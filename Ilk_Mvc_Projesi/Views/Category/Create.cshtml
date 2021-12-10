@@ -1,0 +1,9 @@
+﻿@model Category
+
+<form method="post" asp-action="Create" asp-controller="Category">
+    <label asp-for="CategoryName"></label>
+    <input asp-for="CategoryName" /><br />
+    <label asp-for="Description"></label>
+    <input asp-for="Description" /><br />
+    <input type="submit"  value="Ekle" class="btn btn-warning"/>
+</form>

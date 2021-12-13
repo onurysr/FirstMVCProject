@@ -1,0 +1,24 @@
+﻿@model EmployeeViewModel
+
+<div class="text-danger">
+    <div asp-validation-summary="All"></div>
+</div>
+
+<form method="post" asp-action="Create" asp-controller="Employee">
+    <label asp-for="FirstName"></label>
+    <input asp-for="FirstName" />
+    <span class="text-danger" asp-validation-for="FirstName"></span>
+    <br />
+
+    <label asp-for="LastName"></label>
+    <input asp-for="LastName" />
+    <span class="text-danger" asp-validation-for="LastName"></span>
+    <br />
+
+    <label asp-for="Title"></label>
+    <input asp-for="Title" />
+    <span class="text-danger" asp-validation-for="Title"></span>
+    <br />
+    <input type="submit" value="Ekle" class="btn btn-success" />
+
+</form>

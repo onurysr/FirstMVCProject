@@ -1,0 +1,41 @@
+﻿@model Employee
+
+
+
+
+<a asp-action="Delete" asp-controller="Employee" asp-route-employeeId="@Model.EmployeeId" class="btn btn-danger">Çalışanı Sil</a>
+<a asp-action="Update" asp-controller="Employee" asp-route-id="@Model.EmployeeId" class="btn btn-danger">Çalışanı Güncelle</a>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Sipariş Tarihi</th>
+                    <th>Sipariş Sayısı</th>
+                    <th>Fiyat</th>
+                    <th>Gönderilme Tarihi</th>
+                    <th>Gönderildiği şehir</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Orders)
+                {
+
+                    <tr>
+                        <td>@item.OrderId</td>
+                        <td>@item.OrderDate</td>
+                        <td>@item.ShipVia</td>
+                        <td>@item.Freight</td>
+                        <td>@item.ShippedDate</td>
+                        <td>@item.ShipCity</td>
+
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

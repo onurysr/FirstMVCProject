@@ -1,0 +1,30 @@
+﻿@model List<Employee>
+
+<h1>Çalışanlar</h1>
+<a asp-action="Create" asp-controller="Employee" class="btn btn-success">Çalışan Ekle</a>
+
+<div class="row">
+    <div class="col-9">
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th>Adı</th>
+                    <th>Soyadı</th>
+                    <th>Kıdemi</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Title</td>
+                        <th><a asp-action="Detail" asp-controller="Employee" asp-route-id="@item.EmployeeId" class="btn btn-block btn-primary">Detay</a></th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

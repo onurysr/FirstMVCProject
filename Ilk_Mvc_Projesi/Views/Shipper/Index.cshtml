@@ -1,0 +1,35 @@
+﻿@model List<Shipper>
+
+@{
+    var silinenMesaj = TempData["silinen_shipper"]?.ToString();
+}
+@if (!string.IsNullOrEmpty(silinenMesaj))
+{
+    <h3 class="text-danger"> @silinenMesaj Adlı Kargo Şirketi Silindi.</h3>
+}
+
+<h1>Kargo Şirketleri</h1>
+<a asp-action="Create" asp-controller="Shipper" class="btn btn-success">Ekle</a>
+<div class="row">
+    <div class="col-9">
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th>Şirket Adı</th>
+                    <th>iletişim</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CompanyName</td>
+                        <td>@item.Phone</td>
+                        <td><a asp-action="Detail" asp-controller="Shipper" asp-route-id="@item.ShipperId" class="btn btn-block btn-primary">Detay</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

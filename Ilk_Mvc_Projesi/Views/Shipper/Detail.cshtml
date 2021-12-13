@@ -1,0 +1,30 @@
+﻿@model Shipper
+
+<a asp-controller="Shipper" asp-action="Delete" asp-route-shipperId="@Model.ShipperId" class="btn btn-danger">Sil</a>
+<a asp-controller="Shipper" asp-action="Update" asp-route-id="@Model.ShipperId" class="btn btn-warning">Guncelle</a>
+
+<div class="row">
+    <div class="col-9">
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th>Sipariş No</th>
+                    <th>Toplam Satış Sayısı</th>
+                    <th>Net Satış fiyatı</th>
+                    <th>Sipariş Tarihi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Orders)
+                {
+                    <tr>
+                        <td>@item.OrderId</td>
+                        <td>@item.OrderDetails.Count()</td>
+                        <td>@item.OrderDetails.Sum(x => x.UnitPrice * x.Quantity * (decimal)(1 - x.Discount))</td>
+                        <td>@item.OrderDate</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

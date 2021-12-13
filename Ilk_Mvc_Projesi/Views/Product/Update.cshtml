@@ -1,26 +1,44 @@
 ﻿@model ProductViewModel
 
-<div class="text-danger">
-    <div asp-validation-summary="All"></div>
-</div>
+<div class="bg-danger">
+    <div asp-validation-summary="All">
+    </div>
+    </div>
 
 <form method="post" asp-action="Update" asp-controller="Product">
     <input asp-for="ProductId" type="hidden" />
-    <label asp-for="ProductName"></label>
-    <input asp-for="ProductName" />
-    <span class="text-danger" asp-validation-for="ProductName"></span>
-    <br />
+    <div class="row">
+        <div class="col-3 text-black-50">Ürün Adı</div>
+        <div class="col-3">
+            <input asp-for="ProductName" class="form-control" />
+        </div>
+    </div>
 
-    <label asp-for="UnitPrice"></label>
-    <input asp-for="UnitPrice" />
-    <span class="text-danger" asp-validation-for="UnitPrice"></span>
-    <br />
+    <div class="row">
+        <div class="col-3 text-black-50">Fiyat</div>
+        <div class="col-3">
+            <input asp-for="UnitPrice" class="form-control" />
+        </div>
+    </div>
 
-    <label asp-for="UnitsInStock"></label>
-    <input asp-for="UnitsInStock" />
-    <span class="text-danger" asp-validation-for="UnitsInStock"></span>
-    <br />
+    <div class="row">
+        <div class="col-3 text-black-50">Kategorisi</div>
+        <div class="col-3">
+            <select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-control"></select> @*KategoriId ve ViewBag eşleştiğinde gelicek*@
+        </div>
+    </div>
 
-    <input type="submit" value="Guncelle" class="btn btn-warning" />
+    <div class="row">
+        <div class="col-3 text-black-50">Tedarikçi Firma</div>
+        <div class="col-3">
+            <select asp-for="supplierId" asp-items="ViewBag.SupplierList" class="form-control"></select>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-3 text-black-50"></div>
+        <div class="col-5">
+            <input type="submit" value="Guncelle" class="btn btn-danger" />
+        </div>
+    </div>
 </form>

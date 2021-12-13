@@ -1,42 +1,105 @@
-﻿@model Product
+﻿@model ProductViewModel
 
 <h1>@Model.ProductName</h1>
-<h3>@Model.UnitPrice</h3>
+<h3>@($"{Model.UnitPrice:c2}")</h3>
+
+<div class="bg-info">@TempData["Mesaj"]</div>  @*Aşağıdaki ile aynı*@
 
 
-<a asp-controller="Product" asp-action="Delete" asp-route-productId="@Model.ProductId" class="btn btn-danger">Ürün Sil</a>
-
-<a asp-controller="Product" asp-action="Update" asp-route-id="@Model.ProductId" class="btn btn-danger">Ürün Güncelle</a>
+@*@{
+    var guncellenenMesaj = @TempData["Mesaj"]?.ToString();
+}
+@if (!string.IsNullOrEmpty(guncellenenMesaj))
+{
+    <h3 class="text-danger">@guncellenenMesaj</h3>
+}*@
 
 <div class="row">
-    <div class="col-9">
-        <table class="table-bordered">
-            <thead>
-                <tr>
-                    <th>Kategori Adı</th>
-                    <th>Ürün Adı</th>
-                    <th>Fiyat</th>
-                    <th>Stok Sayısı</th>
-                    <th>Üretici Adı</th>
-                    <th>Detay</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Category.Products)
-                {
-                    <tr>
-                        <td>@item.Category.CategoryName</td>
-                        <td>@item.ProductName</td>
-                        <td>@item.UnitPrice</td>
-                        <td>@item.UnitsInStock</td>
-                        <td>@item.Supplier.CompanyName</td>
-                        <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-primary">Detay</a></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="col-3 text-black-50">Kategori Adı</div>
+    <div class="col-3">@(Model.CategoryId == null ? "Kategorisi Yok" : Model.CategoryName)</div>
+</div>
+
+<div class="row">
+    <div class="col-3 text-black-50">Tedarikçi Firma</div>
+    <div class="col-3">@(Model.supplierId == null ? "Tedarikçi firma yok" : Model.CompanyName)</div>
+</div>
+
+<div class="row">
+    <div class="col-3 text-black-50"></div>
+    <div class="col-5">
+        <a asp-action="Update" asp-controller="Product" asp-route-id="@Model.ProductId" class="btn btn-warning">
+            Düzenle
+        </a>
+    </div>
+    <div class="col">
+        <input type="button" class="btn btn-danger" value="Sil" />
     </div>
 </div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title" id="myModalLabel">Silme Onayı</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Ürün silinecek geri dönüş yok!</p>
+                <p>emin misin?</p>
+                <p class="debug-url"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"> Vazgeç</button>
+                <a class="btn btn-danger btn-ok">Sil</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+<script>
+    $('#confirm-delete').on('show.bs.modal', function (e) {
+        $(this).find('.btn-ok').attr('href',@Url.Action("Delete", "Product", new {id=Model.ProductId}))
+    })
+</script>
+}
+
+@*<a asp-controller="Product" asp-action="Delete" asp-route-productId="@Model.ProductId" class="btn btn-danger">Ürün Sil</a>
+
+    <a asp-controller="Product" asp-action="Update" asp-route-id="@Model.ProductId" class="btn btn-danger">Ürün Güncelle</a>
+
+    <div class="row">
+        <div class="col-9">
+            <table class="table-bordered">
+                <thead>
+                    <tr>
+                        <th>Kategori Adı</th>
+                        <th>Ürün Adı</th>
+                        <th>Fiyat</th>
+                        <th>Stok Sayısı</th>
+                        <th>Üretici Adı</th>
+                        <th>Detay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.)
+                    {
+                        <tr>
+                            <td>@item.Category.CategoryName</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.UnitPrice</td>
+                            <td>@item.UnitsInStock</td>
+                            <td>@item.Supplier.CompanyName</td>
+                            <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-primary">Detay</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>*@
 
 
 

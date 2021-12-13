@@ -8,17 +8,15 @@ namespace Ilk_Mvc_Projesi.ViewModels
 {
     public class ProductViewModel
     {
-        [Required(ErrorMessage = "Ürün Adı Boş olamaz")]
-        [Display(Name = "Ürün Adı")]
-        public string ProductName { get; set; }
-        [Required(ErrorMessage = "Fiyat Boş olamaz")]
-        [Display(Name = "Fiyat")]
-        public decimal UnitPrice { get; set; }
-        [Required(ErrorMessage = "Stok Sayısı Boş olamaz")]
-        [Display(Name = "Stok Sayısı")]
-        public int UnitsInStock { get; set; }
-
         public int ProductId { get; set; }
+        [Required(ErrorMessage ="Bu alan boş olamaz")]
+        public string ProductName { get; set; }
+        public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public int? supplierId { get; set; }
+        public string CompanyName { get; set; }
+        [Range(0,999999999,ErrorMessage = "Ürün Fiyatı 0-999999999 olmalı.")]
+        public decimal? UnitPrice { get; set; }
 
     }
 }

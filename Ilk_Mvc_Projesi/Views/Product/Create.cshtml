@@ -1,0 +1,25 @@
+﻿@model ProductViewModel
+
+<div class="text-danger">
+    <div asp-validation-summary="All"></div>
+</div>
+
+<form method="post" asp-action="Create" asp-controller="Product">
+    <label asp-for="ProductName"></label>
+    <input asp-for="ProductName" />
+    <span class="text-danger" asp-validation-for="ProductName"></span>
+    <br />
+
+    <label asp-for="UnitPrice"></label>
+    <input asp-for="UnitPrice" />
+    <span class="text-danger" asp-validation-for="UnitPrice"></span>
+    <br />
+
+    <label asp-for="UnitsInStock"></label>
+    <input asp-for="UnitsInStock" />
+    <span class="text-danger" asp-validation-for="UnitsInStock"></span>
+    <br />
+
+    <input type="submit" value="Ekle" class="btn btn-warning" />
+
+</form>

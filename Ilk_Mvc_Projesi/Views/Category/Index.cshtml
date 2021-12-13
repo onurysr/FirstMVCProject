@@ -1,6 +1,6 @@
 ﻿@model List<Category>
 @{
-    var silinecekMesaj = @TempData["Silinen_Kategori"].ToString();
+    var silinecekMesaj = @TempData["Silinen_Kategori"]?.ToString();
 }
 @if (!string.IsNullOrEmpty(silinecekMesaj))
 {

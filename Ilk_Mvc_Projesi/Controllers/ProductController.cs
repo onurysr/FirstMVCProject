@@ -17,16 +17,33 @@ namespace Mvc_Project1.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+
+        private int _pageSize = 10;
+        public IActionResult Index(int? page = 1)
         {
-            var model = _context.Products.Include(x => x.OrderDetails)
-                .OrderBy(x => x.ProductName).ToList();
+            var model = _context.Products
+                .Include(x => x.Category)
+                .Include(x => x.Supplier)
+                .OrderBy(x => x.Category.CategoryName)
+                .ThenBy(x => x.ProductName)
+                .Skip((page.GetValueOrDefault()-1)*_pageSize) // 3. sayfanın verileri 20den başlması lazım o yüzden böyle yaptık
+                .Take(_pageSize)
+                .ToList();
+
+            //ViewBag.Categories = _context.Categories.OrderBy(x => x.CategoryName).ToList();
+            //ViewBag.Suppliers = _context.Suppliers.OrderBy(x => x.CompanyName).ToList();
+
+            ViewBag.Page = page.GetValueOrDefault(1);
+            ViewBag.Limit = (int)Math.Ceiling(_context.Products.Count() / (double)_pageSize);
             return View(model);
         }
 
         public IActionResult Detail(int? id)
         {
-            var model = _context.Products.Include(x => x.OrderDetails).FirstOrDefault(x => x.ProductId == id);
+            var model = _context.Products
+                .Include(x => x.Category)
+                .Include(x => x.Supplier)
+                .FirstOrDefault(x => x.ProductId == id);
 
             if (model == null)
             {

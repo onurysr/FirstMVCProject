@@ -14,7 +14,6 @@ namespace Ilk_Mvc_Projesi.ViewModels
         [Required(ErrorMessage = "Bu alan boş bırakalamaz")]
         [Display(Name = "Soyadı")]
         public string LastName { get; set; }
-        [Required(ErrorMessage = "Bu alan boş bırakalamaz")]
         [Display(Name = "Kıdemi")]
         public string Title { get; set; }
 

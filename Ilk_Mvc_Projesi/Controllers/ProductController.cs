@@ -46,10 +46,6 @@ namespace Mvc_Project1.Controllers
                 .Include(x => x.Supplier)
                 .FirstOrDefault(x => x.ProductId == id);
 
-
-
-
-
             if (data == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -90,8 +86,6 @@ namespace Mvc_Project1.Controllers
                 CompanyName = data.Supplier?.CompanyName,
                 UnitPrice = data.UnitPrice
             };
-
-
             //burdan sonrası comboboxları eklemek için method yaptık yaptık
 
             ViewBag.CategoryList = GetCategoryList();
@@ -140,18 +134,20 @@ namespace Mvc_Project1.Controllers
 
         private List<SelectListItem> GetCategoryList()
         {
-            var categories = _context.Categories.OrderBy(x => x.CategoryName).ToList();
-            var categoryList = new List<SelectListItem>()
+            var categories = _context.Categories.OrderBy(x => x.CategoryName).ToList(); //categories'in içinde veritabanından Categoty tablosunu attık
+
+            var categoryList = new List<SelectListItem>() //categorylist listeli oluşturduk tipi selectListItem
             {
                 new SelectListItem("Kategori yok",null) //comboboxa gelecek ad ve karşılığındaki id bir tane oluşturduk
             };
-            foreach (var category in categories)
+
+            foreach (var category in categories) //foreachle categoryliste categories içindeki category adı ve idleri atadık
             {
                 categoryList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString())); //buradan category combosu için ekleme işlemi yaptık foreachle kaç tane varsa eklicek.
             }
             return categoryList;
         }
-        private List<SelectListItem> GetSupplierList()
+        private List<SelectListItem> GetSupplierList() //yukarıdakilerin aynısı
         {
             var suppliers = _context.Suppliers.OrderBy(x => x.CompanyName).ToList();
 

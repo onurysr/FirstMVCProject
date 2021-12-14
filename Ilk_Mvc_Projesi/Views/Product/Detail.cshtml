@@ -7,12 +7,12 @@
 
 
 @*@{
-    var guncellenenMesaj = @TempData["Mesaj"]?.ToString();
-}
-@if (!string.IsNullOrEmpty(guncellenenMesaj))
-{
-    <h3 class="text-danger">@guncellenenMesaj</h3>
-}*@
+        var guncellenenMesaj = @TempData["Mesaj"]?.ToString();
+    }
+    @if (!string.IsNullOrEmpty(guncellenenMesaj))
+    {
+        <h3 class="text-danger">@guncellenenMesaj</h3>
+    }*@
 
 <div class="row">
     <div class="col-3 text-black-50">Kategori Adı</div>
@@ -32,7 +32,7 @@
         </a>
     </div>
     <div class="col">
-        <input type="button" class="btn btn-danger" value="Sil" />
+        <input type="button" class="btn btn-danger" value="Sil" data-toggle="modal" data-target="#confirm-delete" />
     </div>
 </div>
 
@@ -41,65 +41,32 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Silme Onayı</h4>
             </div>
 
             <div class="modal-body">
-                <p>Ürün silinecek geri dönüş yok!</p>
-                <p>emin misin?</p>
+                <p>Ürün silinecektir. Bu işlemin geri dönüşü yoktur!</p>
+                <p>Emin misiniz?</p>
                 <p class="debug-url"></p>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"> Vazgeç</button>
-                <a class="btn btn-danger btn-ok">Sil</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Vazgeç</button>
+                <a class="btn btn-danger btn-ok">SİL</a>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts{ 
-<script>
-    $('#confirm-delete').on('show.bs.modal', function (e) {
-        $(this).find('.btn-ok').attr('href',@Url.Action("Delete", "Product", new {id=Model.ProductId}))
-    })
-</script>
+@section Scripts
+{
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', '@Url.Action("Delete","Product",new {id=Model.ProductId})');
+        });
+    </script>
 }
-
-@*<a asp-controller="Product" asp-action="Delete" asp-route-productId="@Model.ProductId" class="btn btn-danger">Ürün Sil</a>
-
-    <a asp-controller="Product" asp-action="Update" asp-route-id="@Model.ProductId" class="btn btn-danger">Ürün Güncelle</a>
-
-    <div class="row">
-        <div class="col-9">
-            <table class="table-bordered">
-                <thead>
-                    <tr>
-                        <th>Kategori Adı</th>
-                        <th>Ürün Adı</th>
-                        <th>Fiyat</th>
-                        <th>Stok Sayısı</th>
-                        <th>Üretici Adı</th>
-                        <th>Detay</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.)
-                    {
-                        <tr>
-                            <td>@item.Category.CategoryName</td>
-                            <td>@item.ProductName</td>
-                            <td>@item.UnitPrice</td>
-                            <td>@item.UnitsInStock</td>
-                            <td>@item.Supplier.CompanyName</td>
-                            <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-primary">Detay</a></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>*@
 
 
 

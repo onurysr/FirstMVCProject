@@ -115,10 +115,14 @@ namespace Ilk_Mvc_Projesi.Controllers.Apis
         public IActionResult DeleteCategory(int? id)
         {
             var category = _context.Categories.FirstOrDefault(x => x.CategoryId == id);
+            if (category == null)
+            {
+                return NotFound("Böyle bir kategori Yok");
+            }
 
             try
             {
-                _context.Remove(category);
+                _context.Categories.Remove(category);
                 _context.SaveChanges();
                 return Ok("Silme İşlemi Başarılı");
             }

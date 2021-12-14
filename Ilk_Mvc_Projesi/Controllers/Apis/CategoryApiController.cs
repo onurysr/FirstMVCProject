@@ -55,16 +55,23 @@ namespace Ilk_Mvc_Projesi.Controllers.Apis
                 return BadRequest();
             }
 
-            _context.Categories.Add(new Category()
+            var category = new Category()
             {
                 CategoryName = model.CategoryName,
                 Description = model.Description
-            });
+            };
+
+
+            _context.Categories.Add(category);
 
             try
             {
                 _context.SaveChanges();
-                return Ok("Kategori Ekleme işlemi Başarılı");
+                return Ok(new
+                {
+                    Message = "Kategori Ekleme işlemi Başarılı",
+                    model = category
+                });
             }
             catch (Exception ex)
             {

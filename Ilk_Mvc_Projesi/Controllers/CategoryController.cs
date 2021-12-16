@@ -64,7 +64,7 @@ namespace Ilk_Mvc_Projesi.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Detail"/*, new { id = category.CategoryId }*/); // detay tablosu/id sitesine yönlendirir.
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError(string.Empty, $"{model.CategoryName} eklenirken bir hata oluştu tekrar deneyin"); //ilk sıraya hata nerdeyse oraya yazmamız lazım ama hata bir tabloda olmadığı için boş yolladık
             }
@@ -124,7 +124,7 @@ namespace Ilk_Mvc_Projesi.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Detail"/*, new { id = category.CategoryId }*/); // detay tablosu/id sitesine yönlendirir.
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError(string.Empty, $"{model.CategoryName} eklenirken bir hata oluştu tekrar deneyin"); //ilk sıraya hata nerdeyse oraya yazmamız lazım ama hata bir tabloda olmadığı için boş yolladık
                 return View();

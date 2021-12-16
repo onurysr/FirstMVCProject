@@ -1,6 +1,8 @@
 ﻿@model List<Product>
 <h2>Toplam Kayıt: @Model.Count</h2>
 
+<a asp-controller="Product" asp-action="Create" class="btn btn-primary">Ekle</a>
+
 <div class="row">
     <div class="col-12">
         <table class="table table-striped table-hover">
@@ -20,8 +22,8 @@
                     <tr>
                         <td>@item.Category?.CategoryName</td> @*? işareti null ise çalıştırmaz*@
                         <td>@item.ProductName</td>
-                        <td>@($"{item.UnitPrice:c2}")</td> @*c2 türkçe olarak gösterir*@
-                        <td>@(item.Supplier ==  null ? "Tedarikçisi yok" : item.Supplier.CompanyName)</td>
+                        <td>@($"{item.UnitPrice:c2}")</td> @*c2 türkçe birim tl olarak gösterir*@
+                        <td>@(item.Supplier ==  null ? Html.Raw(@"<u>Tedarikcisi Yok</u>") : item.Supplier.CompanyName)</td>
                         @*ikinci yöntem null gelme hatası*@
                         <td><a class="btn btn-info" asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">Detay</a></td>
                     </tr>

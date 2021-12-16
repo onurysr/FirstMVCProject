@@ -64,6 +64,50 @@ namespace Mvc_Project1.Controllers
             return View(model);
         }
 
+        public IActionResult Create()
+        {
+            ViewBag.CategoryList = GetCategoryList();
+            ViewBag.SupplierList = GetSupplierList();
+            return View();
+            
+        }
+
+        [HttpPost]
+        public IActionResult Create(ProductViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.CategoryList = GetCategoryList();
+                ViewBag.SupplierList = GetSupplierList();
+                return View(model);
+            }
+
+
+            var product = new Product()
+            {
+                ProductName = model.ProductName,
+                CategoryId = model.CategoryId,
+                SupplierId = model.supplierId,
+                UnitPrice = model.UnitPrice
+
+            };
+            
+            try
+            {
+                _context.Products.Add(product);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index), new { id = product.ProductId });
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError(string.Empty, ex.Message);
+                ViewBag.CategoryList = GetCategoryList();
+                ViewBag.SupplierList = GetSupplierList();
+                return View(model);
+            }
+        }
+
         public IActionResult Update(int? id)
         {
             var data = _context.Products
@@ -115,7 +159,7 @@ namespace Mvc_Project1.Controllers
             product.SupplierId = model.supplierId;
             try
             {
-                
+
                 _context.Products.Update(product);
                 _context.SaveChanges();
                 TempData["Mesaj"] = $"{product.ProductName} ürünü başarı ile güncellendi";
@@ -129,7 +173,28 @@ namespace Mvc_Project1.Controllers
                 ViewBag.SupplierList = GetSupplierList();
                 return View(model);
             }
-            
+
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            var product = _context.Products.FirstOrDefault(x => x.ProductId == id);
+            if (product == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            try
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction(nameof(Detail), new { id = product.ProductId });
+            }
+
         }
 
         private List<SelectListItem> GetCategoryList()

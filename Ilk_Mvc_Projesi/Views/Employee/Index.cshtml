@@ -1,6 +1,7 @@
 ﻿@model List<Employee>
 
 <h1>Çalışanlar</h1>
+<h2>Toplam Kayıt:@Model.Count</h2>
 <a asp-action="Create" asp-controller="Employee" class="btn btn-success">Çalışan Ekle</a>
 
 <div class="row">
@@ -26,5 +27,31 @@
                 }
             </tbody>
         </table>
+        <input type="button" value="<" class="btn btn-success" id="btn-onceki"/>
+        @ViewBag.Page/@ViewBag.Limit
+        <input type="button" value=">" class="btn btn-success" id="btn-sonraki" />
     </div>
 </div>
+
+@section Scripts{ 
+<script>
+    var limit = @ViewBag.Limit;
+    var page = @ViewBag.Page;
+    $("#btn-onceki").click(function () {
+        if (page > 1) {
+            //page -= 1;
+            //var url2 = "Employee/Index?page=" + page
+            var url ='@Url.Action("Index", "Employee", new { page = ViewBag.Page - 1 })';
+            window.location.href = url;
+        }
+    });
+
+    $("#btn-sonraki").click(function () {
+        if (page < limit) {
+            var url = '@Url.Action("Index", "Employee", new { page = ViewBag.Page + 1 })';
+            window.location.href = url;
+        }
+    });
+
+</script>
+}

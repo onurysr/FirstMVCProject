@@ -16,9 +16,21 @@ namespace Mvc_Project1.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        private int _pageSize = 5;
+
+        public IActionResult Index(int? page = 1)
         {
-            var model = _context.Employees.Include(x => x.Orders).ThenInclude(x => x.OrderDetails).ThenInclude(x => x.Product).OrderBy(x => x.FirstName).ToList();
+            var model = _context.Employees
+                .Include(x => x.Orders)
+                .ThenInclude(x => x.OrderDetails)
+                .ThenInclude(x => x.Product)
+                .OrderBy(x => x.FirstName)
+                .Skip((page.GetValueOrDefault() - 1) * _pageSize)
+                .Take(_pageSize)
+                .ToList();
+
+            ViewBag.Page = page.GetValueOrDefault(1);
+            ViewBag.Limit = (int)Math.Ceiling(_context.Employees.Count() / (double)_pageSize);
             return View(model);
         }
 
@@ -49,7 +61,7 @@ namespace Mvc_Project1.Controllers
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Title = model.LastName
+                Title = model.Title
             };
 
             _context.Employees.Add(employee);

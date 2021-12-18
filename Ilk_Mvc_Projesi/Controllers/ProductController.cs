@@ -35,7 +35,7 @@ namespace Mvc_Project1.Controllers
             //ViewBag.Suppliers = _context.Suppliers.OrderBy(x => x.CompanyName).ToList();
 
             ViewBag.Page = page.GetValueOrDefault(1);
-            ViewBag.Limit = (int)Math.Ceiling(_context.Products.Count() / (double)_pageSize);
+            ViewBag.Limit = (int)Math.Ceiling(_context.Products.Count() / (double)_pageSize); //math.ceiling yukarı yuvarlama işlemi yapar.
             return View(model);
         }
 

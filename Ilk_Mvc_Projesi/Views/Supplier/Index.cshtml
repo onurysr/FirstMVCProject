@@ -1,0 +1,49 @@
+﻿@model List<Supplier>
+
+<div class="row">
+    <div class="col-9">
+        <table class="table table-striped table-active">
+            <thead>
+                <tr>
+                    <th>Şirket Adı</th>
+                    <th>Temsilci Adı</th>
+                    <th>Ulke/Sehir</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CompanyName</td>
+                        <td>@item.ContactName</td>
+                        <td>@item.Country/@item.City</td>
+                        <td><a asp-controller="Supplier" asp-action="Detail" asp-route-id="@item.SupplierId" class="btn btn-primary">Detay</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <input type="button" class="btn btn-success" value="<" id="btn-onceki" />
+        @ViewBag.Page/@ViewBag.Limit
+        <input type="button" class="btn btn-success" value=">"id="btn-sonraki" />
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+    var page = @ViewBag.Page;
+    var limit =@ViewBag.Limit;
+    $("#btn-onceki").click(function () {
+        if (page > 1) {
+            var url = '@Url.Action("Index", "Supplier", new {page = ViewBag.Page -1})';
+            window.location.href = url;
+        }
+    });
+    $("#btn-sonraki").click(function () {
+        if (page < limit) {
+            var url = '@Url.Action("Index", "Supplier", new {page = ViewBag.Page +1})';
+            window.location.href = url;
+        }
+    })
+    </script>
+}

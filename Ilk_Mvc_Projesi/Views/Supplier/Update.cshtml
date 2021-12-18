@@ -1,0 +1,36 @@
+﻿@model SupplierViewModel
+
+<form method="post" asp-action="Update" asp-controller="Supplier">
+    <input asp-for="SupplierId" type="hidden" />
+    <div class="row">
+        <div class="col-3 text-black-50">Şirket Adı</div>
+        <div class="col-3">
+            <input asp-for="CompanyName" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 text-black-50">Temsilci Adı</div>
+        <div class="col-3">
+            <input asp-for="ContactName" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 text-black-50">Şehir</div>
+        <div class="col-3">
+            <input asp-for="City" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 text-black-50">Ülke</div>
+        <div class="col-3">
+            <input asp-for="Country" class="form-control" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3 text-black-50"></div>
+        <div class="col-3">
+            <input type="submit" value="Guncelle" class="btn btn-info" />
+        </div>
+    </div>
+</form>

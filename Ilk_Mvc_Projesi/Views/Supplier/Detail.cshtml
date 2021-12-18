@@ -21,3 +21,47 @@
     <div class="col-2 text-black-50">Ülke/Şehir</div>
     <div class="col-2">@Model.Country/@Model.City</div>
 </div>
+
+<div class="row">
+    <div class="col-3 text-black-50"></div>
+    <div class="col-5">
+        <a asp-action="Update" asp-controller="Supplier" asp-route-id="@Model.SupplierId" class="btn btn-warning">
+            Düzenle
+        </a>
+    </div>
+    <div class="col">
+        <input type="button" class="btn btn-danger" value="Sil" data-toggle="modal" data-target="#confirm-delete" />
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Silme Onayı</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Ürün silinecektir. Bu işlemin geri dönüşü yoktur!</p>
+                <p>Emin misiniz?</p>
+                <p class="debug-url"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Vazgeç</button>
+                <a class="btn btn-danger btn-ok">SİL</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', '@Url.Action("Delete","Supplier",new {id=Model.SupplierId})');
+        });
+    </script>
+}

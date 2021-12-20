@@ -24,37 +24,92 @@
     </div>
 </form>
 
-<div class="col-9">
-    <table class="table-bordered">
-        <thead>
-            <tr>
-                <th>Ürün Adi</th>
-                <th>Fiyat</th>
-                <th>Kategori Adi</th>
-                <th>Siparişleri</th>
-                <th>Hacim</th>
-                <th>Detay</th>
-            </tr>
-
-        </thead>
-        <tbody id="tbl-body">
-            @foreach (var item in Model.Products)
-            {
+<div class="row">
+    <div class="col-9">
+        <table class="table-bordered">
+            <thead>
                 <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.UnitPrice</td>
-                    <td>@item.Category.CategoryName</td>
-                    <td>@item.OrderDetails.Count</td>
-                    <td>@item.OrderDetails.Sum(x => x.UnitPrice * x.Quantity * (decimal)(1 - x.Discount))</td>
-                    <td><a class="btn btn-block btn-success" asp-controller="Category" asp-action="Detail" asp-route-id="@item.CategoryId">Detay</a></td> @*Önemliiiiiiiiii*@
+                    <th>Ürün Adi</th>
+                    <th>Fiyat</th>
+                    <th>Kategori Adi</th>
+                    <th>Siparişleri</th>
+                    <th>Hacim</th>
+                    <th>Detay</th>
+                    <th>Sil</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+
+            </thead>
+            <tbody id="tbl-body">
+                @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.UnitPrice</td>
+                        <td>@item.Category.CategoryName</td>
+                        <td>@item.OrderDetails.Count</td>
+                        <td>@item.OrderDetails.Sum(x => x.UnitPrice * x.Quantity * (decimal)(1 - x.Discount))</td>
+                        <td>
+                            <a class="btn btn-block btn-success" asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">Detay</a>
+                        </td> @*Önemliiiiiiiiii*@
+                        <td>
+                            <input type="button" class="btn btn-danger btn-delete" value="Sil" data-toggle="modal" data-target="#confirm-delete" data-id="@item.ProductId" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Silme Onayı</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Ürün silinecektir. Bu işlemin geri dönüşü yoktur!</p>
+                <p>Emin misiniz?</p>
+                <p class="debug-url"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Vazgeç</button>
+                <a class="btn btn-danger btn-ok">SİL</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts{
     <script>
+        var productId = 0;
+        $('.btn-delete').click(function () {
+            productId = ${ this }.attr("data-id");
+        });
+        $('#confirm-delete').on('show.bs.modal', function (e) {
+            ${ this }.find('btn-ok').on('click', urunSil);
+        });
+        function urunSil() {
+            console.log(productId);
+            $.ajax({
+                            "headers": {
+                                "Content-Type": "application/json"
+                },
+                url: '@Url.Action("Delete","ProductApi")' + '/' + productId,
+                            type: "POST",
+                            data: JSON.stringify(model),
+                            dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                }
+                error: function (request, status, error) {
+                    console.log(request.responseText);
+                }
+        };
                     $("#cb-urunEkle").click(function () {
                         $("#frm-add").toggle(500);
                     })
@@ -86,6 +141,7 @@
                                 var td4 = document.createElement("td");
                                 var td5 = document.createElement("td");
                                 var td6 = document.createElement("td");
+                                var td7 = document.createElement("td");
                                 //var aLink = document.createElement("a");
 
                                 $(td1).html(model.productName);
@@ -100,7 +156,7 @@
                                     .html("Detay")
                                     .appendTo(td6);
 
-                                $(tr).append(td1).append(td2).append(td3).append(td4).append(td5).append(td6).appendTo("#tbl-body");/* append eklemek demek*/
+                                $(tr).append(td1).append(td2).append(td3).append(td4).append(td5).append(td6).append(td7).appendTo("#tbl-body");/* append eklemek demek*/
                             },
                             error: function (request, status, error) {
                                 console.log(request.responseText);

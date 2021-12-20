@@ -47,5 +47,29 @@ namespace Ilk_Mvc_Projesi.Controllers.Apis
                 return BadRequest($"Bir Hata oluştu:{ex.Message}");
             }
         }
+        [HttpPost]
+        [Route("~/api/ProductApi/Delete/(id?)")]
+        public IActionResult Delete(int? id=0)
+        {
+            var product = _context.Products.FirstOrDefault(x => x.ProductId == id);
+            if (product == null)
+            {
+                return NotFound("Böyle bir ürün yok");
+            }
+            try
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+                return Ok(new
+                {
+                    Message = "Ürün Silme İşlemi Başarılı"
+                });
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

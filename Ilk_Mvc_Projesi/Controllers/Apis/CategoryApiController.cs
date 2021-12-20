@@ -117,7 +117,6 @@ namespace Ilk_Mvc_Projesi.Controllers.Apis
             }
 
         }
-
         [HttpPost]
         public IActionResult DeleteCategory(int? id)
         {
@@ -131,7 +130,10 @@ namespace Ilk_Mvc_Projesi.Controllers.Apis
             {
                 _context.Categories.Remove(category);
                 _context.SaveChanges();
-                return Ok("Silme İşlemi Başarılı");
+                return Ok(new
+                {
+                    Message = "Kategori Silme İşlemi Başarılı"
+                });
             }
             catch (Exception ex)
             {

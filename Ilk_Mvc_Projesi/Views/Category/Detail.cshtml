@@ -1,12 +1,28 @@
 ﻿@model Category
-@{
-}
+<input asp-for="CategoryId" type="hidden" />
 
 <h1>@Model.CategoryName</h1>
 <h3>@Model.Description</h3>
 
-<a asp-action="Create" asp-controller="Category" class="btn btn-info" >Yeni Kategori</a>
+<a asp-action="Create" asp-controller="Category" class="btn btn-info">Yeni Kategori</a>
 <a asp-action="Delete" asp-controller="Category" asp-route-categoryId=@Model.CategoryId class="btn btn-danger">Kategori sil</a>
+<input type="checkbox" id="cb-urunEkle" value="Ürün Ekle" />
+<br />
+<form id="frm-add" style="display:none">
+    <div class="row">
+        <div class="col">
+            <input type="text" class="form-control" id="in-urunAdi" placeholder="Ürün Adı" />
+        </div>
+        <div class="col">
+            <input type="number" min="0" max="99999" class="form-control" id="in-fiyat" placeholder="Fiyatı" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <input type="submit" class="btn btn-success form-control" id="btn-urunEkle" />
+        </div>
+    </div>
+</form>
 
 <div class="col-9">
     <table class="table-bordered">
@@ -21,18 +37,76 @@
             </tr>
 
         </thead>
-        <tbody>
+        <tbody id="tbl-body">
             @foreach (var item in Model.Products)
             {
-            <tr>
-                <td>@item.ProductName</td>
-                <td>@item.UnitPrice</td>
-                <td>@item.Category.CategoryName</td>
-                <td>@item.OrderDetails.Count</td>
-                <td>@item.OrderDetails.Sum(x=>x.UnitPrice*x.Quantity*(decimal)(1-x.Discount))</td>
-                <td><a class="btn btn-block btn-success" asp-controller="Category" asp-action="Detail" asp-route-id="@item.CategoryId">Detay</a></td> @*Önemliiiiiiiiii*@
-            </tr>
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.UnitPrice</td>
+                    <td>@item.Category.CategoryName</td>
+                    <td>@item.OrderDetails.Count</td>
+                    <td>@item.OrderDetails.Sum(x => x.UnitPrice * x.Quantity * (decimal)(1 - x.Discount))</td>
+                    <td><a class="btn btn-block btn-success" asp-controller="Category" asp-action="Detail" asp-route-id="@item.CategoryId">Detay</a></td> @*Önemliiiiiiiiii*@
+                </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section Scripts{
+    <script>
+                    $("#cb-urunEkle").click(function () {
+                        $("#frm-add").toggle(500);
+                    })
+                    $('#frm-add').submit(function (e) {
+                        e.preventDefault(); /*formun kendi kendine sabitlemesine sağlıyor*/
+                        var model = {
+                            productName: $("#in-urunAdi").val(),
+                            UnitPrice: $("#in-fiyat").val(),
+                            categoryId: $("#CategoryId").val()
+                        };
+                        //console.log(model);
+                        $.ajax({
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            url: '@Url.Action("Add","ProductApi")',
+                            type: "POST",
+                            data: JSON.stringify(model),
+                            dataType: "json",
+                            success: function (response) {
+                                //alert(response.message);
+                                console.log(response);
+                                var model = response.model; /*yazarken sürekli response.model yapmamak için yaptık*/
+
+                                var tr = document.createElement("tr");
+                                var td1 = document.createElement("td");
+                                var td2 = document.createElement("td");
+                                var td3 = document.createElement("td");
+                                var td4 = document.createElement("td");
+                                var td5 = document.createElement("td");
+                                var td6 = document.createElement("td");
+                                //var aLink = document.createElement("a");
+
+                                $(td1).html(model.productName);
+                                $(td2).html(model.unitPrice); //konsoldaki gibi yazmak gerekiyor o yüzden "u" küçük
+                                $(td3).html("@Model.CategoryName");
+                                $(td4).html("0");
+                                $(td5).html("0");
+                                var detailUrl = '@Url.Action("Detail","Product")';
+                                $("<a></a>")
+                                    .attr("href", `${detailUrl}/${model.productId}`)
+                                    .addClass("btn btn-block btn-info")
+                                    .html("Detay")
+                                    .appendTo(td6);
+
+                                $(tr).append(td1).append(td2).append(td3).append(td4).append(td5).append(td6).appendTo("#tbl-body");/* append eklemek demek*/
+                            },
+                            error: function (request, status, error) {
+                                console.log(request.responseText);
+                                alert(request.responseText);
+                            }
+                        });
+                    });
+    </script>
+}

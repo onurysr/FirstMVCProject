@@ -25,6 +25,9 @@
                 categoryName: $("#CategoryName").val(),
                 description: $("#Description").val()
             };
+            //console.log(model);
+            var categoryDetailUrl = '@Url.Action("Detail","Category")';
+            //console.log(categoryDetailUrl);
             $.ajax({
                 "headers": {
                     "Content-Type":"application/json"
@@ -34,12 +37,15 @@
                 data: JSON.stringify(model),
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
+                    alert(response.message);
+                    window.location.href = `${categoryDetailUrl}/${response.model.CategoryId}`;
+                    /*window.location.href = categoryDetailUrl +"/"+response.model.CategoryId;*/ /*yukarıdaki ile aynı işlem*/
                 },
                 error: function (request, status, error) {
                     console.log(request.responseText);
+                    alert(request.responseText);
                 }
-            }).fail;
+            });
         });
     })
 </script>

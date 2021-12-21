@@ -1,26 +1,22 @@
-﻿using Ilk_Mvc_Projesi.Models;
+﻿using System;
+using System.Linq;
+using Ilk_Mvc_Projesi.Models;
 using Ilk_Mvc_Projesi.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ilk_Mvc_Projesi.Controllers.Apis
 {
-
-
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductApiController : ControllerBase
     {
-        private readonly NorthwindContext _context;
-        public ProductApiController(NorthwindContext context)
-        {
-            _context = context;
-        }
+        private readonly NorthwindContext _dbContext;
 
+        public ProductApiController(NorthwindContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         [HttpPost]
         public IActionResult Add(ProductViewModel model)
         {
@@ -30,45 +26,41 @@ namespace Ilk_Mvc_Projesi.Controllers.Apis
                 ProductName = model.ProductName,
                 UnitPrice = model.UnitPrice
             };
-
             try
             {
-                _context.Products.Add(product);
-                _context.SaveChanges();
+                _dbContext.Products.Add(product);
+                _dbContext.SaveChanges();
                 return Ok(new
                 {
-                    Message = "Ürün Ekleme İşlemi Başarılı",
+                    Message = "Ürün ekleme işlemi başarılı",
                     Model = product
                 });
             }
             catch (Exception ex)
             {
-
-                return BadRequest($"Bir Hata oluştu:{ex.Message}");
+                return BadRequest($"Bir hata oluştu: {ex.Message}");
             }
         }
+
         [HttpPost]
-        [Route("~/api/ProductApi/Delete/(id?)")]
-        public IActionResult Delete(int? id=0)
+        [Route("~/api/productapi/delete/{id?}")]
+        public IActionResult Delete(int id = 0)
         {
-            var product = _context.Products.FirstOrDefault(x => x.ProductId == id);
+            var product = _dbContext.Products.FirstOrDefault(x => x.ProductId == id);
             if (product == null)
-            {
-                return NotFound("Böyle bir ürün yok");
-            }
+                return NotFound("Ürün bulunamadı");
             try
             {
-                _context.Products.Remove(product);
-                _context.SaveChanges();
+                _dbContext.Products.Remove(product);
+                _dbContext.SaveChanges();
                 return Ok(new
                 {
-                    Message = "Ürün Silme İşlemi Başarılı"
+                    Message = $"{product.ProductName} isimli ürün başarıyla silindi"
                 });
             }
             catch (Exception ex)
             {
-
-                return BadRequest(ex.Message);
+                return BadRequest($"Bir hata oluştu: {ex.Message}");
             }
         }
     }

@@ -1,25 +1,25 @@
 ﻿@model Category
-<input asp-for="CategoryId" type="hidden" />
-
+<input type="hidden" asp-for="CategoryId" />
 <h1>@Model.CategoryName</h1>
 <h3>@Model.Description</h3>
-
 <a asp-action="Create" asp-controller="Category" class="btn btn-info">Yeni Kategori</a>
-<a asp-action="Delete" asp-controller="Category" asp-route-categoryId=@Model.CategoryId class="btn btn-danger">Kategori sil</a>
-<input type="checkbox" id="cb-urunEkle" value="Ürün Ekle" />
+<a asp-action="Delete" asp-controller="Category" asp-route-categoryId=@Model.CategoryId class="btn btn-danger">Kategoriyi Sil</a>
+
+<label>Ürün ekle</label>
+<input type="checkbox" class="form-check-inline" id="cb-urunekle" />
 <br />
-<form id="frm-add" style="display:none">
+<form id="frm-add" style="display: none">
     <div class="row">
         <div class="col">
-            <input type="text" class="form-control" id="in-urunAdi" placeholder="Ürün Adı" />
+            <input type="text" class="form-control" id="in-urunadi" placeholder="Ürün Adı">
         </div>
         <div class="col">
-            <input type="number" min="0" max="99999" class="form-control" id="in-fiyat" placeholder="Fiyatı" />
+            <input type="number" min="0" max="99999" class="form-control" id="in-fiyat" placeholder="Fiyatı">
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <input type="submit" class="btn btn-success form-control" id="btn-urunEkle" />
+            <input type="submit" class="btn btn-success form-control" id="btn-urunekle" value="Ürün Ekle" />
         </div>
     </div>
 </form>
@@ -29,15 +29,14 @@
         <table class="table-bordered">
             <thead>
                 <tr>
-                    <th>Ürün Adi</th>
+                    <th>Ürün Adı</th>
                     <th>Fiyat</th>
-                    <th>Kategori Adi</th>
+                    <th>Kategori Adı</th>
                     <th>Siparişleri</th>
                     <th>Hacim</th>
                     <th>Detay</th>
                     <th>Sil</th>
                 </tr>
-
             </thead>
             <tbody id="tbl-body">
                 @foreach (var item in Model.Products)
@@ -49,10 +48,13 @@
                         <td>@item.OrderDetails.Count</td>
                         <td>@item.OrderDetails.Sum(x => x.UnitPrice * x.Quantity * (decimal)(1 - x.Discount))</td>
                         <td>
-                            <a class="btn btn-block btn-success" asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">Detay</a>
-                        </td> @*Önemliiiiiiiiii*@
+                            <a class="btn btn-block btn-info"
+                               asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">
+                                Detay
+                            </a>
+                        </td>
                         <td>
-                            <input type="button" class="btn btn-danger btn-delete" value="Sil" data-toggle="modal" data-target="#confirm-delete" data-id="@item.ProductId" />
+                            <input type="button" class="btn btn-danger btn-delete" value="SİL!" data-toggle="modal" data-target="#confirm-delete" data-id="@item.ProductId" />
                         </td>
                     </tr>
                 }
@@ -117,7 +119,7 @@
         $("#frm-add").submit(function(e) {
             e.preventDefault();
             var model = {
-                productName: $("#in-urunAdi").val(),
+                productName: $("#in-urunadi").val(),
                 unitPrice: $("#in-fiyat").val(),
                 categoryId: $("#CategoryId").val()
             };

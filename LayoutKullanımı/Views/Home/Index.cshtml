@@ -4,7 +4,6 @@
 
 @model List<Urun>
 
-
 @*
     _ViewStarts
 *@
@@ -14,4 +13,10 @@
     <p>
         @item.Id - @item.Ad - @($"{item.Fiyat:c2}")
     </p>
+}
+@section Scripts{  @*bunu kullanmamzın sebebi scripts layout da bulunuyor ama kod layoutun üstünde kalıyor section kullanarak önce layoutdaki scripty çalışır*@
+    <script>
+        App.name = "Kamil";
+        console.log(App.selamla());
+    </script>
 }

@@ -84,85 +84,80 @@
     </div>
 </div>
 
-@section Scripts{
+@section Scripts
+{
     <script>
         var productId = 0;
-        $('.btn-delete').click(function () {
-            productId = ${ this }.attr("data-id");
+        $('.btn-delete').click(function() {
+            productId = $(this).attr("data-id");
         });
-        $('#confirm-delete').on('show.bs.modal', function (e) {
-            ${ this }.find('btn-ok').on('click', urunSil);
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').on('click', urunSil);
         });
         function urunSil() {
             console.log(productId);
             $.ajax({
-                            "headers": {
-                                "Content-Type": "application/json"
+                "headers": {
+                    "Content-Type": "application/json"
                 },
-                url: '@Url.Action("Delete","ProductApi")' + '/' + productId,
-                            type: "POST",
-                            data: JSON.stringify(model),
-                            dataType: "json",
-                success: function (response) {
+                url: '@Url.Action("Delete", "ProductApi")'+'/'+productId,
+                type: "POST",
+                dataType: "json",
+                success: function(response) {
                     console.log(response);
-                }
-                error: function (request, status, error) {
+                },
+                error: function(request, status, error) {
                     console.log(request.responseText);
                 }
-        };
-                    $("#cb-urunEkle").click(function () {
-                        $("#frm-add").toggle(500);
-                    })
-                    $('#frm-add').submit(function (e) {
-                        e.preventDefault(); /*formun kendi kendine sabitlemesine sağlıyor*/
-                        var model = {
-                            productName: $("#in-urunAdi").val(),
-                            UnitPrice: $("#in-fiyat").val(),
-                            categoryId: $("#CategoryId").val()
-                        };
-                        //console.log(model);
-                        $.ajax({
-                            "headers": {
-                                "Content-Type": "application/json"
-                            },
-                            url: '@Url.Action("Add","ProductApi")',
-                            type: "POST",
-                            data: JSON.stringify(model),
-                            dataType: "json",
-                            success: function (response) {
-                                //alert(response.message);
-                                console.log(response);
-                                var model = response.model; /*yazarken sürekli response.model yapmamak için yaptık*/
-
-                                var tr = document.createElement("tr");
-                                var td1 = document.createElement("td");
-                                var td2 = document.createElement("td");
-                                var td3 = document.createElement("td");
-                                var td4 = document.createElement("td");
-                                var td5 = document.createElement("td");
-                                var td6 = document.createElement("td");
-                                var td7 = document.createElement("td");
-                                //var aLink = document.createElement("a");
-
-                                $(td1).html(model.productName);
-                                $(td2).html(model.unitPrice); //konsoldaki gibi yazmak gerekiyor o yüzden "u" küçük
-                                $(td3).html("@Model.CategoryName");
-                                $(td4).html("0");
-                                $(td5).html("0");
-                                var detailUrl = '@Url.Action("Detail","Product")';
-                                $("<a></a>")
-                                    .attr("href", `${detailUrl}/${model.productId}`)
-                                    .addClass("btn btn-block btn-info")
-                                    .html("Detay")
-                                    .appendTo(td6);
-
-                                $(tr).append(td1).append(td2).append(td3).append(td4).append(td5).append(td6).append(td7).appendTo("#tbl-body");/* append eklemek demek*/
-                            },
-                            error: function (request, status, error) {
-                                console.log(request.responseText);
-                                alert(request.responseText);
-                            }
-                        });
-                    });
+            });
+        }
+        $("#cb-urunekle").click(function() {
+            $("#frm-add").toggle(500);
+        });
+        $("#frm-add").submit(function(e) {
+            e.preventDefault();
+            var model = {
+                productName: $("#in-urunAdi").val(),
+                unitPrice: $("#in-fiyat").val(),
+                categoryId: $("#CategoryId").val()
+            };
+            $.ajax({
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                url: '@Url.Action("Add", "ProductApi")',
+                type: "POST",
+                data: JSON.stringify(model),
+                dataType: "json",
+                success: function(response) {
+                    //alert(response.message);
+                    console.log(response);
+                    var model = response.model;
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    var td3 = document.createElement("td");
+                    var td4 = document.createElement("td");
+                    var td5 = document.createElement("td");
+                    var td6 = document.createElement("td");
+                    //var alink = document.createElement("a");
+                    $(td1).html(model.productName);
+                    $(td2).html(model.unitPrice);
+                    $(td3).html("@Model.CategoryName");
+                    $(td4).html("0");
+                    $(td5).html("0");
+                    var detailUrl = '@Url.Action("Detail", "Product")';
+                    $("<a></a>")
+                        .attr("href", `${detailUrl}/${model.productId}`)
+                        .addClass("btn btn-block btn-info")
+                        .html("Detay").appendTo(td6);
+                    //$(td6).append(alink[0]);
+                    $(tr).append(td1).append(td2).append(td3).append(td4).append(td5).append(td6).appendTo("#tbl-body");
+                },
+                error: function(request, status, error) {
+                    console.log(request.responseText);
+                }
+            });
+        });
     </script>
 }

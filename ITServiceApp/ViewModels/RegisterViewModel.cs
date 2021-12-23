@@ -8,14 +8,14 @@ namespace ITServiceApp.ViewModels
 {
     public class RegisterViewModel
     {
-        [Required(ErrorMessage ="Username Alanı Gereklidir")]
+        [Required(ErrorMessage ="Kullanıcı Adı Alanı Gereklidir")]
         [Display(Name="Kullanıcı Adı")]
         public string UserName { get; set; }
         [Required(ErrorMessage ="İsim alanı gerekli")]
         [StringLength(50)]
         [Display(Name ="Ad")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "Soyad alanı gerekli")]
+        [Required(ErrorMessage = "Soyadı alanı gerekli")]
         [StringLength(50)]
         [Display(Name = "Soyad")]
         public string Surname { get; set; }
@@ -27,7 +27,7 @@ namespace ITServiceApp.ViewModels
         [Display(Name = "Şifre")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Şifreler Tekrar alanı Gerekli")]
+        [Required(ErrorMessage = "Şifre Tekrar alanı Gerekli")]
         [Display(Name = "Şifre Tekrar")]
         [DataType(DataType.Password)]
         [Compare(nameof(Password),ErrorMessage ="Şifreler Uyuşmuyor")]

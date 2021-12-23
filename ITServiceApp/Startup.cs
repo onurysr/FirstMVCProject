@@ -45,7 +45,8 @@ namespace ITServiceApp
                  //User settings
                  options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ-._@+";
                  options.User.RequireUniqueEmail = true;
-             });
+             }).AddEntityFrameworkStores<MyContext>();
+
             services.ConfigureApplicationCookie(options =>
             {
                 //cookie settings

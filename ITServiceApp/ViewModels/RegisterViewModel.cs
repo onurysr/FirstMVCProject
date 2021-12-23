@@ -9,6 +9,7 @@ namespace ITServiceApp.ViewModels
     public class RegisterViewModel
     {
         [Required(ErrorMessage ="Username Alanı Gereklidir")]
+        [Display(Name="Kullanıcı Adı")]
         public string UserName { get; set; }
         [Required(ErrorMessage ="İsim alanı gerekli")]
         [StringLength(50)]

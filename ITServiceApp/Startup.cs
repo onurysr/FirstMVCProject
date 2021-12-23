@@ -33,7 +33,7 @@ namespace ITServiceApp
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
              {
                  options.Password.RequireUppercase = false;
-                 options.Password.RequireLowercase = true;
+                 options.Password.RequireLowercase = false;
                  options.Password.RequireDigit = true;
                  options.Password.RequiredLength = 5;
 

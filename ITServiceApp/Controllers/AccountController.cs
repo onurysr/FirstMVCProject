@@ -1,5 +1,6 @@
 ﻿using ITServiceApp.Models.Identity;
 using ITServiceApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,10 +13,12 @@ namespace ITServiceApp.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
         public IActionResult Register()
         {
@@ -66,8 +69,39 @@ namespace ITServiceApp.Controllers
                 ModelState.AddModelError(string.Empty, "Bir hata oluştu");
                 return View(model);
             }
+        }
 
+        public IActionResult Login()
+        {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, true);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Kullanıcı Adı veya Şifre Hatalı");
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

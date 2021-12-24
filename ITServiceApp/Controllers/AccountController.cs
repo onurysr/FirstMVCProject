@@ -86,7 +86,14 @@ namespace ITServiceApp.Controllers
                 var count = _userManager.Users.Count();
                 result = await _userManager.AddToRoleAsync(user, count == 1 ? RoleModels.Admin : RoleModels.User);
                 //Email onay maili
+                var registeruser = await _userManager.FindByNameAsync(model.UserName);
 
+                await _emailSender.SendAsync(new EmailMessage()
+                {
+                    Concats = new string[] { "onurking3131@gmail.com" },
+                    Subject = $"{registeruser.UserName} - Kullanıcı Kayıt oldu",
+                    Body = $"{registeruser.Name} {registeruser.Surname} isimli Kullanıcı {DateTime.Now:g} itibari ile siteye Kayıt Olmuştur."
+                });
 
                 //Login sayfasına Yönlendirme
                 return RedirectToAction("Login","Account");

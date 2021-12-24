@@ -71,6 +71,9 @@ namespace ITServiceApp
 
             app.UseRouting(); //routing mekanizmasý
 
+            app.UseAuthentication();//login logout kullanmak için
+            app.UseAuthorization();//Authorization attirbute kullanabilmek için
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

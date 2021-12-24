@@ -20,6 +20,8 @@ namespace ITServiceApp.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
@@ -96,7 +98,6 @@ namespace ITServiceApp.Controllers
             }
         }
 
-        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Logout()
         {

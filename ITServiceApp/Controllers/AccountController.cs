@@ -1,5 +1,6 @@
 ﻿using ITServiceApp.Models;
 using ITServiceApp.Models.Identity;
+using ITServiceApp.Services;
 using ITServiceApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,12 +17,14 @@ namespace ITServiceApp.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
+        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _emailSender = emailSender;
             CheckRole();
         }
 
@@ -83,6 +86,8 @@ namespace ITServiceApp.Controllers
                 var count = _userManager.Users.Count();
                 result = await _userManager.AddToRoleAsync(user, count == 1 ? RoleModels.Admin : RoleModels.User);
                 //Email onay maili
+
+
                 //Login sayfasına Yönlendirme
                 return RedirectToAction("Login","Account");
             }
@@ -108,6 +113,14 @@ namespace ITServiceApp.Controllers
 
             if (result.Succeeded)
             {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+
+                await _emailSender.SendAsync(new EmailMessage()
+                {
+                    Concats = new string[] { "onurking3131@gmail.com" },
+                    Subject = $"{user.UserName} - Kullanıcı Giriş Yaptı",
+                    Body = $"{user.Name} {user.Surname} isimli Kullanıcı {DateTime.Now:g} itibari ile siteye giriş yapmıştır."
+                });
                 return RedirectToAction("Index", "Home");
 
             }

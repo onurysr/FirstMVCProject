@@ -1,4 +1,5 @@
-﻿using ITServiceApp.Models.Identity;
+﻿using ITServiceApp.Models;
+using ITServiceApp.Models.Identity;
 using ITServiceApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,11 +15,28 @@ namespace ITServiceApp.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            CheckRole();
+        }
+
+        private void CheckRole()
+        {
+            foreach (var roleName in RoleModels.Roles)
+            {
+                if (!_roleManager.RoleExistsAsync(roleName).Result)
+                {
+                    var result = _roleManager.CreateAsync(new ApplicationRole()
+                    {
+                        Name = roleName
+                    }).Result;                   
+                }
+            }
         }
 
         [AllowAnonymous]
@@ -62,9 +80,11 @@ namespace ITServiceApp.Controllers
             if (result.Succeeded)
             {
                 //kullanıcıya rol atama
+                var count = _userManager.Users.Count();
+                result = await _userManager.AddToRoleAsync(user, count == 1 ? RoleModels.Admin : RoleModels.User);
                 //Email onay maili
                 //Login sayfasına Yönlendirme
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login","Account");
             }
             else
             {

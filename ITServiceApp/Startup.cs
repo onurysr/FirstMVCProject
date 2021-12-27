@@ -45,8 +45,10 @@ namespace ITServiceApp
                  options.Lockout.AllowedForNewUsers = false;
 
                  //User settings
-                 options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ-._@+";
+                 options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ0123456789-._@+";
                  options.User.RequireUniqueEmail = true;
+
+                 //options.SignIn.RequireConfirmedEmail = true;   //emaili confirm edilmiþ hesaplar girsin demek
              }).AddEntityFrameworkStores<MyContext>().AddDefaultTokenProviders();// register kýsmýndaki genereateemailtoken kýsmý için
 
             services.ConfigureApplicationCookie(options =>

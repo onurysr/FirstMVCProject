@@ -9,7 +9,8 @@ namespace ITServiceApp.Models
     {
         public static string Admin = "Admin";
         public static string User = "User";
+        public static string Passive = "Passive";
 
-        public static ICollection<string> Roles => new List<string>() { Admin, User };
+        public static ICollection<string> Roles => new List<string>() { Admin, User,Passive }; //get set deki get yapıyor bu.
     }
 }

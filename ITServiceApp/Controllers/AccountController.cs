@@ -5,9 +5,12 @@ using ITServiceApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace ITServiceApp.Controllers
@@ -84,16 +87,20 @@ namespace ITServiceApp.Controllers
             {
                 //kullanıcıya rol atama
                 var count = _userManager.Users.Count();
-                result = await _userManager.AddToRoleAsync(user, count == 1 ? RoleModels.Admin : RoleModels.User);
-                //Email onay maili
-                var registeruser = await _userManager.FindByNameAsync(model.UserName);
+                result = await _userManager.AddToRoleAsync(user, count == 1 ? RoleModels.Admin : RoleModels.Passive);
 
-                await _emailSender.SendAsync(new EmailMessage()
+                //Email onay maili
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Scheme);
+
+                var emailMessage = new EmailMessage()
                 {
-                    Concats = new string[] { "onurking3131@gmail.com" },
-                    Subject = $"{registeruser.UserName} - Kullanıcı Kayıt oldu",
-                    Body = $"{registeruser.Name} {registeruser.Surname} isimli Kullanıcı {DateTime.Now:g} itibari ile siteye Kayıt Olmuştur."
-                });
+                    Concats = new string[] { user.Email },
+                    Body = $"Please Confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking hre</a>",
+                    Subject = "Confirm your email"
+                };
+                await _emailSender.SendAsync(emailMessage);
 
                 //Login sayfasına Yönlendirme
                 return RedirectToAction("Login","Account");
@@ -103,6 +110,30 @@ namespace ITServiceApp.Controllers
                 ModelState.AddModelError(string.Empty, "Bir hata oluştu");
                 return View(model);
             }
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string userId,string code)
+        {
+            if (userId == null || code == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to Load user with ID '{userId}'.");
+            }
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            ViewBag.StatusMessage = result.Succeeded ? "Thank you for confirming your email" : "Error confirming your email.";
+
+            if (result.Succeeded && _userManager.IsInRoleAsync(user,RoleModels.Passive).Result)
+            {
+                await _userManager.RemoveFromRoleAsync(user, RoleModels.Passive);
+                await _userManager.AddToRoleAsync(user, RoleModels.User);
+            }
+            return View();
         }
 
         public IActionResult Login()
@@ -120,14 +151,14 @@ namespace ITServiceApp.Controllers
 
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
+                //var user = await _userManager.FindByNameAsync(model.UserName);
 
-                await _emailSender.SendAsync(new EmailMessage()
-                {
-                    Concats = new string[] { "onurking3131@gmail.com" },
-                    Subject = $"{user.UserName} - Kullanıcı Giriş Yaptı",
-                    Body = $"{user.Name} {user.Surname} isimli Kullanıcı {DateTime.Now:g} itibari ile siteye giriş yapmıştır."
-                });
+                //await _emailSender.SendAsync(new EmailMessage()
+                //{
+                //    Concats = new string[] { "onurking3131@gmail.com" },   Email Sender Mesajı
+                //    Subject = $"{user.UserName} - Kullanıcı Giriş Yaptı",
+                //    Body = $"{user.Name} {user.Surname} isimli Kullanıcı {DateTime.Now:g} itibari ile siteye giriş yapmıştır."
+                //});
                 return RedirectToAction("Index", "Home");
 
             }

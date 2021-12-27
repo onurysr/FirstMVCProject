@@ -4,6 +4,7 @@ using ITServiceApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +47,7 @@ namespace ITServiceApp
                  //User settings
                  options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ-._@+";
                  options.User.RequireUniqueEmail = true;
-             }).AddEntityFrameworkStores<MyContext>();
+             }).AddEntityFrameworkStores<MyContext>().AddDefaultTokenProviders();// register kýsmýndaki genereateemailtoken kýsmý için
 
             services.ConfigureApplicationCookie(options =>
             {

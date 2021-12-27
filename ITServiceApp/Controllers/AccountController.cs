@@ -1,4 +1,5 @@
-﻿using ITServiceApp.Models;
+﻿using ITServiceApp.Extensions;
+using ITServiceApp.Models;
 using ITServiceApp.Models.Identity;
 using ITServiceApp.Services;
 using ITServiceApp.ViewModels;
@@ -22,7 +23,7 @@ namespace ITServiceApp.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailSender)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -40,7 +41,7 @@ namespace ITServiceApp.Controllers
                     var result = _roleManager.CreateAsync(new ApplicationRole()
                     {
                         Name = roleName
-                    }).Result;                   
+                    }).Result;
                 }
             }
         }
@@ -103,7 +104,7 @@ namespace ITServiceApp.Controllers
                 await _emailSender.SendAsync(emailMessage);
 
                 //Login sayfasına Yönlendirme
-                return RedirectToAction("Login","Account");
+                return RedirectToAction("Login", "Account");
             }
             else
             {
@@ -112,7 +113,7 @@ namespace ITServiceApp.Controllers
             }
         }
 
-        public async Task<IActionResult> ConfirmEmail(string userId,string code)
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
             {
@@ -128,7 +129,7 @@ namespace ITServiceApp.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             ViewBag.StatusMessage = result.Succeeded ? "Thank you for confirming your email" : "Error confirming your email.";
 
-            if (result.Succeeded && _userManager.IsInRoleAsync(user,RoleModels.Passive).Result)
+            if (result.Succeeded && _userManager.IsInRoleAsync(user, RoleModels.Passive).Result)
             {
                 await _userManager.RemoveFromRoleAsync(user, RoleModels.Passive);
                 await _userManager.AddToRoleAsync(user, RoleModels.User);
@@ -174,6 +175,88 @@ namespace ITServiceApp.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
+            var model = new UserProfileViewModel()
+            {
+                Email = user.Email,
+                Name = user.Name,
+                Surname = user.Surname
+            };
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserProfileViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            if (user.Email != model.Email)
+            {
+                await _userManager.RemoveFromRoleAsync(user, RoleModels.User);
+                await _userManager.AddToRoleAsync(user, RoleModels.Passive);
+                user.Email = model.Email;
+                //tekrardan onay maili
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Scheme);
+
+                var emailMessage = new EmailMessage()
+                {
+                    Concats = new string[] { user.Email },
+                    Body = $"Please Confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking hre</a>",
+                    Subject = "Confirm your email"
+                };
+                await _emailSender.SendAsync(emailMessage);
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, ModelState.ToFullErrorString());
+            }
+
+            
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult UpdatePassword()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(PasswordChangeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                ViewBag.Message = "Şifre Güncelleme işlemi Başarılı";
+            }
+            else
+            {
+                ViewBag.Message = $"Bir hata Oluştu:{ModelState.ToFullErrorString()}";
+            }
+            return RedirectToAction("Profile", "Account");
+
         }
     }
 }

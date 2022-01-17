@@ -1,4 +1,5 @@
 using ITServiceApp.Data;
+using ITServiceApp.MapperProfiles;
 using ITServiceApp.Models.Identity;
 using ITServiceApp.Services;
 using Microsoft.AspNetCore.Builder;
@@ -62,6 +63,12 @@ namespace ITServiceApp
             });
 
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddAutoMapper(options =>
+            {
+                options.AddProfile<PaymentProfile>();
+                //options.AddProfile(typeof(PaymentProfile)); ikisi de olur.
+            });
 
             services.AddControllersWithViews();
         }

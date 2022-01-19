@@ -17,10 +17,9 @@ namespace ITServiceApp.Services
         private readonly IyzicoPaymentOptions _options;
         private readonly IMapper _mapper;
 
-        public IyzicoPaymentService(IConfiguration configuration,IyzicoPaymentOptions options, IMapper mapper)
+        public IyzicoPaymentService(IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
-            _options = options;
             _mapper = mapper;
 
             var section = _configuration.GetSection(IyzicoPaymentOptions.Key);
@@ -40,7 +39,7 @@ namespace ITServiceApp.Services
         {
             if (binNumber.Length> 6)
             {
-                binNumber = binNumber.Substring(0, 0);
+                binNumber = binNumber.Substring(0, 6);
             }
             var conversationId = GenerateConversationId();
             var request = new RetrieveInstallmentInfoRequest
@@ -69,7 +68,8 @@ namespace ITServiceApp.Services
 
         public PaymentResponseModel Pay(PaymentModel model)
         {
-            throw new NotImplementedException();
+            return null;
+
         }
     }
 }

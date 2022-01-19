@@ -1,4 +1,5 @@
-﻿using ITServiceApp.Services;
+﻿using ITServiceApp.MapperProfiles;
+using ITServiceApp.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin;
 using Owin;
@@ -15,7 +16,11 @@ namespace ITServiceTest
 
         public void Configuration(IServiceCollection services)
         {
-            services.AddTransient<IPaymentService, IyzicoPaymentService>();
+            services.AddScoped<IPaymentService, IyzicoPaymentService>();
+            services.AddAutoMapper(options =>
+            {
+                options.AddProfile(typeof(PaymentProfile));
+            });
         }
     }
 }

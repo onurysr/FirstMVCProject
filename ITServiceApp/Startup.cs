@@ -28,7 +28,7 @@ namespace ITServiceApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
             services.AddDbContext<MyContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SqlConnection"));
@@ -75,7 +75,7 @@ namespace ITServiceApp
             services.AddControllersWithViews();
         }
 
-        
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -98,6 +98,11 @@ namespace ITServiceApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{Controller=home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:Admin}/{controller=Manage}/{action=Index}/{id?}"
+                );
             });//default routing nasýl olacaðý belirtmek için
         }
     }

@@ -1,4 +1,5 @@
-﻿using ITServiceApp.Extensions;
+﻿using DevExtreme.AspNet.Data;
+using ITServiceApp.Extensions;
 using ITServiceApp.Models.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,9 +23,11 @@ namespace ITServiceApp.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(DataSourceLoadOptions options)
+        public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            return Ok();
+            var data = _userManager.Users;
+
+            return Ok(DataSourceLoader.Load(data, loadOptions));
         }
            
     }

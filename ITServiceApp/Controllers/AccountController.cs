@@ -44,6 +44,10 @@ namespace ITServiceApp.Controllers
                     }).Result;
                 }
             }
+
+            //var admin = _userManager.Users.First(x => x.Email == "onurking3131@gmail.com");
+            //var v1 = _userManager.RemovePasswordAsync(admin).Result;
+            //var v2 = _userManager.AddPasswordAsync(admin, "123456*").Result;
         }
 
         [AllowAnonymous]

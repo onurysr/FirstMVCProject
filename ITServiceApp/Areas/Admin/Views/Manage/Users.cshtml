@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Tüm Kullanıcılar";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="card-title">Kullanıcı Detayları</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="dxGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+{ 
+<script src="~/Vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
+<script>
+        var dataGrid = null;
+            $(() => {
+            var url = '../../../api/userapi';
+        dataGrid = $("#dxGrid").dxDataGrid({
+                remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
+                dataSource: DevExpress.data.AspNet.createStore({
+                    key: "id",
+                    loadUrl: `${url}/get`,
+                    updateUrl: `${url}/update`,
+                    insertUrl: `${url}/InsertOrder`,
+
+                    deleteURl: `${url}/DeleteOrder`,
+                    onBeforeSend(method, ajaxOptions) {
+                        ajaxOptions.xhrFields = { withCredentials: true };
+                        console.log(method);
+                        console.log(ajaxOptions);
+                    }
+                }),
+
+            editing: {
+                mode: 'form',
+                allowUpdating:true
+            },
+            allowColumnResizing: true,
+            showColumnLines: true,
+            showRowLines: true,
+            rowAlternateEnabled: true,
+            showBorders: true,
+            searchPanel: {
+                visible: true,
+                width: 240,
+                placeholder:"Ara..."
+            },
+            filterRow: {
+                visible: true,
+                applyFilter:"auto"
+            },
+            headerFilter: {
+                visible:true
+            },
+            export: {
+                enabled: true,
+                fileName: `Tüm kullanıcılar ${parseInt(Math.random() * 10000000)}`
+            },
+            paging: {
+                pageSize:20
+            },
+            pager: {
+                showPageSizeSelector: true,
+                allowPageSizes: [5, 15, 30, 45],
+                showInfo:true
+            },
+            selection: {
+                mode:"multiple"
+            },
+            columns: [
+                "id", "name", "surname", "userName", "email",
+                {
+                    dataField: "createdDate",
+                    caption: "Kayıt Tarihi",
+                    dataType: "date",
+                    format:'dd/MM/yyyy',
+                    sortOrder:"desc"
+                }
+            ]
+            }).dxDataGrid("instance");
+
+    });
+</script>
+}

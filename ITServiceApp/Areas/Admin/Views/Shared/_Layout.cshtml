@@ -16,7 +16,8 @@
     <link href="~/admin-assets/css/icons.min.css" rel="stylesheet" />
     <link href="~/admin-assets/css/metisMenu.min.css" rel="stylesheet" />
     <link href="~/admin-assets/css/app.min.css" rel="stylesheet" />
-    @await RenderSectionAsync("styles", required:false)
+    <link href="~/Vendor/devextreme/dist/css/dx.light.css" rel="stylesheet" />
+    @await RenderSectionAsync("styles", required: false)
 </head>
 
 <body>
@@ -54,6 +55,11 @@
     <script src="~/admin-assets/js/jquery.slimscroll.min.js"></script>
     <script src="~/admin-assets/plugins/apexcharts/apexcharts.min.js"></script>
     <script src="~/admin-assets/js/app.js"></script>
-    @await RenderSectionAsync("Scripts",required:false) 
+    <script type="text/javascript" src="/Vendor/exceljs/dist/exceljs.min.js"></script>
+    <script type="text/javascript" src="/Vendor/file-saver/dist/fileSaver.min.js"></script>
+    <script type="text/javascript" src="/Vendor/jszip/dist/jszip.min.js"></script>
+    <script type="text/javascript" src="/Vendor/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/Vendor/devextreme/dist/js/dx.all.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

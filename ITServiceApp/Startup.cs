@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -87,6 +89,11 @@ namespace ITServiceApp
 
             app.UseHttpsRedirection(); //http - güvenli sertifika çalýþmasý için
             app.UseStaticFiles(); //wwwroot klasöründeki statik dosyalara eriþmek için
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"node_modules")),
+                RequestPath = new PathString("/Vendor")
+            });
 
             app.UseRouting(); //routing mekanizmasý
 

@@ -83,12 +83,39 @@
                 mode:"multiple"
             },
             columns: [
-                "id", "name", "surname", "userName", "email",
+                {
+                    caption:"Id",
+                    dataField: "id",
+                    visible: false,
+                    allowFiltering: false,
+                    formItem: {visible:false}
+                },
+                {
+                    caption: "Ad",
+                    dataField:"name"
+                },
+                {
+                    caption: "Soyad",
+                    dataField: "surname"
+                },
+                {
+                    caption: "Kullanıcı Adı",
+                    dataField:"userName"
+                },
+                {
+                    caption: "Email Adresi",
+                    dataField: "email"
+                },
+                {
+                    caption: "Email Onayı",
+                    dataField: "emailConfirmed",
+                    dataType:"boolean"
+                },
                 {
                     dataField: "createdDate",
                     caption: "Kayıt Tarihi",
-                    dataType: "date",
-                    format:'dd/MM/yyyy',
+                    dataType: "datetime",
+                    format:'dd/MM/yyyy HH:mm',
                     sortOrder:"desc"
                 }
             ]

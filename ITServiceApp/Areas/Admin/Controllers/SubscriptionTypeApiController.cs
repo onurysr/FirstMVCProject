@@ -34,6 +34,7 @@ namespace ITServiceApp.Areas.Admin.Controllers
 
         }
 
+        #region crud
         [HttpGet]
         public IActionResult Detail(Guid id, DataSourceLoadOptions loadOptions)
         {
@@ -123,5 +124,6 @@ namespace ITServiceApp.Areas.Admin.Controllers
             }
             return Ok(new JsonResponseViewModel());
         }
+        #endregion
     }
 }

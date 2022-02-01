@@ -29,16 +29,16 @@
     <script>
         var dataGrid = null;
             $(() => {
-            var url = '../../../api/userapi';
+            var url = '../../../api/subscriptiontypeapi';
         dataGrid = $("#dxGrid").dxDataGrid({
                 remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
                 dataSource: DevExpress.data.AspNet.createStore({
                     key: "id",
                     loadUrl: `${url}/get`,
                     updateUrl: `${url}/update`,
-                    insertUrl: `${url}/InsertOrder`,
+                    insertUrl: `${url}/insert`,
 
-                    deleteURl: `${url}/DeleteOrder`,
+                    deleteURl: `${url}/delete`,
                     onBeforeSend(method, ajaxOptions) {
                         ajaxOptions.xhrFields = { withCredentials: true };
                         console.log(method);
@@ -48,7 +48,9 @@
 
             editing: {
                 mode: 'form',
-                allowUpdating:true
+                allowUpdating: true,
+                allowAdding: true,
+                allowDeleting:true
             },
             allowColumnResizing: true,
             showColumnLines: true,
@@ -69,7 +71,7 @@
             },
             export: {
                 enabled: true,
-                fileName: `Tüm kullanıcılar ${parseInt(Math.random() * 10000000)}`
+                fileName: `Tüm Üyelikler ${parseInt(Math.random() * 10000000)}`
             },
             paging: {
                 pageSize:20
@@ -95,28 +97,27 @@
                     dataField:"name"
                 },
                 {
-                    caption: "Soyad",
-                    dataField: "surname"
+                    caption: "Açıklama",
+                    dataField: "description"
                 },
                 {
-                    caption: "Kullanıcı Adı",
-                    dataField:"userName"
+                    caption: "Ay",
+                    dataField: "Month",
+                    dataType:"number"
                 },
                 {
-                    caption: "Email Adresi",
-                    dataField: "email"
-                },
-                {
-                    caption: "Email Onayı",
-                    dataField: "emailConfirmed",
-                    dataType:"boolean"
-                },
+                    caption: "Fiyat",
+                    dataField: "price",
+                    dataType: "number",
+                    format:"#.## TL"
+                },   
                 {
                     dataField: "createdDate",
                     caption: "Kayıt Tarihi",
                     dataType: "datetime",
                     format:'dd/MM/yyyy HH:mm',
-                    sortOrder:"desc"
+                    sortOrder: "desc",
+                    visible:false
                 }
             ]
             }).dxDataGrid("instance");

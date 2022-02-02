@@ -6,6 +6,7 @@ using ITServiceApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,9 @@ namespace ITServiceApp.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var data = _dbContext.SubscriptionTypes;
+            var data = _dbContext.SubscriptionTypes.Include(x=>x.Subscriptions);
+
+
 
             return Ok(DataSourceLoader.Load(data, loadOptions));
 
@@ -74,7 +77,7 @@ namespace ITServiceApp.Areas.Admin.Controllers
             return Ok(new JsonResponseViewModel());
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult Update(Guid key, string values)
         {
             var data = _dbContext.SubscriptionTypes.Find(key);

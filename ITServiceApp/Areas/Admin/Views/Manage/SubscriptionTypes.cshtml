@@ -37,8 +37,7 @@
                     loadUrl: `${url}/get`,
                     updateUrl: `${url}/update`,
                     insertUrl: `${url}/insert`,
-
-                    deleteURl: `${url}/delete`,
+                    deleteUrl: `${url}/delete`,
                     onBeforeSend(method, ajaxOptions) {
                         ajaxOptions.xhrFields = { withCredentials: true };
                         console.log(method);
@@ -102,7 +101,7 @@
                 },
                 {
                     caption: "Ay",
-                    dataField: "Month",
+                    dataField: "month",
                     dataType:"number"
                 },
                 {
@@ -117,7 +116,7 @@
                     dataType: "datetime",
                     format:'dd/MM/yyyy HH:mm',
                     sortOrder: "desc",
-                    visible:false
+                    visible:true
                 }
             ]
             }).dxDataGrid("instance");

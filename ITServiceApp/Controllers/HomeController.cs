@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using ITServiceApp.Data;
+using ITServiceApp.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +11,18 @@ namespace ITServiceApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly MyContext _dbContext;
+        private readonly IMapper _mapper;
+        public HomeController(MyContext dbContext, IMapper mapper)
+        {
+            _dbContext = dbContext;
+            _mapper = mapper;
+        }
         public IActionResult Index()
         {
-            return View();
+
+            var data = _dbContext.SubscriptionTypes.ToList().Select(x=>_mapper.Map<SubscriptionTypeViewModel>(x)).ToList();
+            return View(data);
         }
     }
 }

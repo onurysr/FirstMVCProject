@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<SubscriptionTypeViewModel> 
+
+@{
     ViewBag.Title = "AnaSayfa";
 }
 
@@ -64,3 +66,6 @@
     </div>
 </section>
 <!--====== Banner Slider End ======-->
+
+
+<partial name="Partials/_PricingTable" model="Model"/>

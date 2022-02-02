@@ -10,7 +10,9 @@ namespace ITServiceApp.MapperProfiles
 {
     public class SubscriptionProfiles:Profile
     {
-        CreateMap<SubscriptionType, SubscriptionTypeViewModel>().ReverseMap();
-        CreateMap<Address, AddressViewModel>().ReverseMap();
+        public SubscriptionProfiles()
+        {
+            CreateMap<SubscriptionType, SubscriptionTypeViewModel>().ReverseMap();
+        }
     }
 }

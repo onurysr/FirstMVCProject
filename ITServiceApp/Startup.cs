@@ -72,6 +72,7 @@ namespace ITServiceApp
             services.AddAutoMapper(options =>
             {
                 options.AddProfile<PaymentProfile>();
+                options.AddProfile<SubscriptionProfiles>();
                 //options.AddProfile(typeof(PaymentProfile)); ikisi de olur.
             });
 

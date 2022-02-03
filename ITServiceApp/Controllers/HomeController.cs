@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ITServiceApp.Data;
+using ITServiceApp.Models.Entities;
 using ITServiceApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,7 +22,18 @@ namespace ITServiceApp.Controllers
         public IActionResult Index()
         {
 
-            var data = _dbContext.SubscriptionTypes.OrderBy(x => x.Price).Select(x=>_mapper.Map<SubscriptionTypeViewModel>(x)).ToList();
+            var data = _dbContext.SubscriptionTypes.OrderBy(x => x.Price).ToList().Select(x=>_mapper.Map<SubscriptionTypeViewModel>(x)).ToList();
+
+            //var model = new List<SubscriptionTypeViewModel>();
+
+            //var query = _dbContext.SubscriptionTypes.OrderBy(x => x.Price).ToList();
+
+            //foreach (var item in query)              ---------------- Uzun YOl-------------
+            //{
+            //    var dataItem = _mapper.Map<SubscriptionTypeViewModel>(SubscriptionType);
+            //    model.Add(dataItem);
+            //}
+
             return View(data);
         }
     }

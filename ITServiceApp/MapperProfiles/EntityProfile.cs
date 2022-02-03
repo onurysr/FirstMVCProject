@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ITServiceApp.MapperProfiles
 {
-    public class SubscriptionProfiles:Profile
+    public class EntityProfile:Profile
     {
-        public SubscriptionProfiles()
+        public EntityProfile()
         {
             CreateMap<SubscriptionType, SubscriptionTypeViewModel>().ReverseMap();
         }

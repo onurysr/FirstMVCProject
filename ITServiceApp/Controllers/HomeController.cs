@@ -22,7 +22,7 @@ namespace ITServiceApp.Controllers
         public IActionResult Index()
         {
 
-            var data = _dbContext.SubscriptionTypes.OrderBy(x => x.Price).ToList().Select(x=>_mapper.Map<SubscriptionTypeViewModel>(x)).ToList();
+            //var data = _dbContext.SubscriptionTypes.OrderBy(x => x.Price).ToList().Select(x=>_mapper.Map<SubscriptionTypeViewModel>(x)).ToList();  1.yol
 
             //var model = new List<SubscriptionTypeViewModel>();
 
@@ -34,7 +34,7 @@ namespace ITServiceApp.Controllers
             //    model.Add(dataItem);
             //}
 
-            return View(data);
+            return View();
         }
     }
 }
